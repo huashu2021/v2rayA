@@ -1,57 +1,59 @@
-# v2rayA [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/v2rayA/v2raya)](https://hub.docker.com/r/mzz2017/v2raya) [![Travis (.org)](https://img.shields.io/travis/v2rayA/v2rayA?label=travis-ci%20build)](https://travis-ci.org/v2rayA/v2rayA)
+前言
+v2rayA是一款适用于Windows、macOS和Linux操作系统的开源网络代理客户端软件。它是基于V2Ray（V2Ray是一个优秀的网络代理工具）开发的，提供了一个简单易用的界面，让用户可以轻松地配置和管理代理规则。
 
-[**English**](https://github.com/v2rayA/v2rayA/blob/main/README.md)&nbsp;&nbsp;&nbsp;[**简体中文**](https://github.com/v2rayA/v2rayA/blob/main/README_zh.md)
+本次部署环境：ubuntu 20.04
 
-v2rayA is a V2Ray client supporting global transparent proxy on Linux and system proxy on Windows and macOS, it is compatible with SS, SSR, Trojan(trojan-go), Tuic and [Juicity](https://github.com/juicity) protocols. [[SSR protocol list]](https://github.com/v2rayA/shadowsocksR/blob/main/README.md#ss-encrypting-algorithm)
+1 安装V2ray内核
+v2rayA 的功能依赖于 V2Ray 内核，所以需要先装内核
 
-We are committed to providing the simplest operation and meet most needs.
+V2Ray官方脚本 安装参考：https://github.com/v2fly/fhs-install-v2ray
 
-Thanks to the advantages of Web GUI, you can not only use it on your local computer, but also easily deploy it on a router or NAS.
+Xray官方脚本 安装参考：https://github.com/XTLS/Xray-install
 
-Project：https://github.com/v2rayA/v2rayA
+本次内核安装基于 v2rayA 官方镜像安装：
 
+curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash
+2 安装V2rayA
+添加公钥
+wget -qO - https://apt.v2raya.org/key/public-key.asc | sudo tee /etc/apt/trusted.gpg.d/v2raya.asc   #添加公钥
+echo "deb https://apt.v2raya.org/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list    #添加v2rayA软件源
+sudo apt update    #更新软件源
+安装 v2rayA
+sudo apt install v2raya
+启动 v2rayA
+sudo systemctl start v2raya.service
+部署成功！
 
-## Usage
+3 GUI界面
+通过2017端口进入web管理界面
 
-v2rayA mainly provides the following methods of installation:
+http://localhost:2017
 
-1. Install from apt-source or AUR
-2. Docker
-3. Our self-built [scoop bucket](https://github.com/v2rayA/v2raya-scoop) (for Windows users)
-4. Our self-built [homebrew tap](https://github.com/v2rayA/homebrew-v2raya)
-5. Our self-built [OpenWrt repo](https://github.com/v2rayA/v2raya-openwrt) and OpenWrt's official repo(from OpenWrt version 22.03)
-6. Microsoft winget: https://winstall.app/apps/v2rayA.v2rayA
-7. Ubuntu Snap: https://snapcraft.io/v2raya
-8. Binary file and installation package from GitHub releases
+如果无法访问请检查服务是否启动！
 
-See [**v2rayA - Docs**](https://v2raya.org/en/docs/prologue/introduction/)
+在这里插入图片描述 第一次进入创建一个管理员账号和密码。后续重置可以通过命令：
 
+sudo v2raya --reset-password  #重置密码
+第一次进入之后导入你的订阅链接，或是输入自己部署的节点！
 
-## Screenshot
+导入之后点击更新，之后切换标签至你的节点处查看你的全部节点情况
 
-<img src="https://i.loli.net/2020/04/19/gt3NqOMiafYbp7L.png" border="0">
+在这里插入图片描述
 
-## Statement
+在未启动服务时，连接的节点呈现柚红色。我们在左上角点击相应按钮启动服务。
 
-1. The program does not store any user data in the cloud, and all user data is stored in local.
-2. **Do not use this project for illegal purposes.**
+选择一个或多个节点连接。这里不建议选择过多的节点，4 个以内为佳。之后启动服务！启动之后启动的节点呈现蓝色，左上角的图标也显示为蓝色的正在运行。启动成功。
 
-## Credits
+在这里插入图片描述
 
-[hq450/fancyss](https://github.com/hq450/fancyss)
+配置代理
 
-[ToutyRater/v2ray-guide](https://github.com/ToutyRater/v2ray-guide/blob/master/routing/sitedata.md)
+默认情况下 v2rayA 会通过核心开放 20170(socks5), 20171(http), 20172(带分流规则的http) 端口。
 
-[nadoo/glider](https://github.com/nadoo/glider)
+Linux使用v2ray客户端带WEB GUI部署教程
 
-[Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat)
+这种方法是 v2rayA 推荐的方法。它相比于其他方法具有诸多优势，v2rayA 可以一键开启透明代理，为所有程序提供代理服务。
 
-[zfl9/ss-tproxy](https://github.com/zfl9/ss-tproxy/blob/master/ss-tproxy)
+在设置中选择透明代理的分流方式，以及实现方式，然后保存即可。
 
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/v2rayA/v2rayA.svg)](https://starchart.cc/v2rayA/v2rayA)
-
-## License
-
-[![License: AGPL v3-only](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+注意，如需选择 GFWList，需要下载对应的规则库，请点击右上角的更新以完成下载。
